@@ -1,16 +1,9 @@
 package com.lwdevelop.customerServiceAdmin.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -26,16 +19,7 @@ public class User {
     
     private String email;
 
-    @Column(nullable = false)
     private String ipAddress;
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<ChatMessage> messages = new HashSet<>();
-    
-    public void addMessage(ChatMessage message) {
-        messages.add(message);
-        message.setUser(this);
-    }
     
     
 }

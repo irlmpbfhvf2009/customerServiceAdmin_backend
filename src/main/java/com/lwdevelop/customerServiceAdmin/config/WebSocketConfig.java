@@ -25,6 +25,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 允許使用socketJs方式訪問 即可通過http://IP:PORT/tmax/ws來和服務端websocket連接
         registry.addEndpoint("/tmax/ws")
+        // .setAllowedOrigins("*")
         .withSockJS();
     }
 

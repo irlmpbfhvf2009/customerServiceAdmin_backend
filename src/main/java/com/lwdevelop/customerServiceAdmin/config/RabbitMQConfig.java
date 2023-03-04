@@ -6,6 +6,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,16 +38,31 @@ public class RabbitMQConfig {
         return connectionFactory;
     }
     
+
+    @Bean
+    public RabbitTemplate rabbitTemplate() {
+        return new RabbitTemplate(connectionFactory());
+    }
+
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return rabbitTemplate;
     }
+
+    @Bean
+    public SimpleMessageListenerContainer messageListenerContainer() {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory());
+        container.setQueueNames("chat-queue");
+        container.setMessageListener(new ChatMessageListener());
+        return container;
+    }
     
     @Bean
     public Queue queue() {
-        return new Queue("chat-messages");
+        return new Queue("chat-queue");
     }
     
     @Bean
@@ -56,7 +72,7 @@ public class RabbitMQConfig {
     
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(queue()).to(topicExchange()).with("chat-messages.#");
+        return BindingBuilder.bind(queue()).to(topicExchange()).with("tmax/ws");
     }
     
 }
