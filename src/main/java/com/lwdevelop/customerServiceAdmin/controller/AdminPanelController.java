@@ -51,7 +51,7 @@ public class AdminPanelController {
         if (!admin.getPassword().equals(password)) {
             return ResponseUtils.response(RetEnum.RET_USER_PASSWORD_ERROR, data);
         }
-        if(!admin.getEnabled()){
+        if (!admin.getEnabled()) {
             return ResponseUtils.response(RetEnum.RET_USER_DISABLED, data);
         }
         try {
@@ -61,25 +61,25 @@ public class AdminPanelController {
             }
             admin.setLastLoginIP(CommUtils.getClientIP(request));
             adminService.saveAdmin(admin);
-            log.info("AdminPanelController ==> login ... [ {}{} ]", username,"登入成功");
+            log.info("AdminPanelController ==> login ... [ {}{} ]", username, "登入成功");
             JwtUtils jwtToken = new JwtUtils();
             String token = jwtToken.generateToken(admin); // 取得token
             data.put("token", token);
-            return ResponseUtils.response(RetEnum.RET_SUCCESS, data,"登入成功");
+            return ResponseUtils.response(RetEnum.RET_SUCCESS, data, "登入成功");
         } catch (Exception e) {
-            log.info("AdminPanelController ==> login ... [ {} ] Exception:{}", "登入失敗",e.toString());
+            log.info("AdminPanelController ==> login ... [ {} ] Exception:{}", "登入失敗", e.toString());
             return ResponseUtils.response(RetEnum.RET_LOGIN_FAIL, data);
         }
-        
+
     }
 
     @PostMapping("/loginOut")
     public ResponseEntity<ResponseUtils.ResponseData> loginOut(
             HttpServletRequest request,
             @RequestParam("token") String token) throws Exception {
-            new JwtUtils().invalidateToken(token);
-            return ResponseUtils.response(RetEnum.RET_SUCCESS, new HashMap<>());
-        
+        new JwtUtils().invalidateToken(token);
+        return ResponseUtils.response(RetEnum.RET_SUCCESS, new HashMap<>());
+
     }
 
     @PostMapping("/info")
@@ -89,7 +89,7 @@ public class AdminPanelController {
         String username = new JwtUtils().verifyToken(token);
         Admin admin = adminService.findByUsername(username);
         HashMap<String, Object> data = new HashMap<>();
-        data.put("info",admin);
+        data.put("info", admin);
         return ResponseUtils.response(RetEnum.RET_SUCCESS, data);
     }
 
