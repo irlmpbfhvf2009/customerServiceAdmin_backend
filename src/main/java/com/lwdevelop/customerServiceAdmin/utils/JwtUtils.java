@@ -1,11 +1,10 @@
 package com.lwdevelop.customerServiceAdmin.utils;
 
 import java.util.Date;
+import java.util.HashMap;
 import javax.xml.bind.DatatypeConverter;
 import org.springframework.stereotype.Component;
-
 import com.lwdevelop.customerServiceAdmin.entity.Admin;
-
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtUtils {
 
   private static final String SECRET = "5$98f12!@a$15";
-  private int jwtExpirationMs = 1 * 60 * 60 * 1000;
+  private static final int jwtExpirationMs = 1 * 60 * 60 * 1000;
+  private HashMap<String, Date> invalidTokens = new HashMap<>();
 
   public String generateToken(Admin member) {
     return generateTokenFromUsername(member.getUsername());
@@ -31,6 +31,29 @@ public class JwtUtils {
 
   public String getUserNameFromJwtToken(String token) {
     return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody().getSubject();
+  }
+
+  public boolean invalidateToken(String token) {
+    try {
+      Claims claims = Jwts.parser()
+          .setSigningKey(SECRET)
+          .parseClaimsJws(token)
+          .getBody();
+
+      invalidTokens.put(token, claims.getExpiration());
+
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  public boolean isTokenInvalid(String token) {
+    if (invalidTokens.containsKey(token)) {
+      Date expirationDate = invalidTokens.get(token);
+      return expirationDate.after(new Date());
+    }
+    return false;
   }
 
   public boolean validateToken(String token) {
@@ -54,7 +77,8 @@ public class JwtUtils {
   }
 
   public String verifyToken(String token) {
-    return Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(SECRET)).parseClaimsJws(token).getBody().getSubject();
+    return Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(SECRET)).parseClaimsJws(token).getBody()
+        .getSubject();
   }
 
 }

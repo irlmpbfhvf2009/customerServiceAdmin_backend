@@ -47,25 +47,19 @@ public class SecurityConfig {
         "/swagger-resources/**",
         "/configuration/security",
         "/swagger-ui.html",
-        "/webjars/**",
-        "/favicon.ico" ,
-        "/test/**",
-        "/chat/**",
-        "/chata/**",
-        "/admins/**",
-        "/ws/**",
-        "/tmax/**",
+        "/webjars/**"
       };
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .cors().and().csrf().disable()
-                // 基于 token，不需要 session
+                // 基於 token，不需要 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers("/admins/**").hasAuthority("ADMIN")
                 .antMatchers(AUTH_LIST).permitAll()
                 .anyRequest().authenticated()
                 .and()

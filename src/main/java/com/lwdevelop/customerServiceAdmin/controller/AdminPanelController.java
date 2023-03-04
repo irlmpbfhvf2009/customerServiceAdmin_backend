@@ -21,6 +21,7 @@ import com.lwdevelop.customerServiceAdmin.entity.Admin;
 import com.lwdevelop.customerServiceAdmin.entity.ChatMessage;
 import com.lwdevelop.customerServiceAdmin.service.impl.AdminServiceImpl;
 import com.lwdevelop.customerServiceAdmin.utils.CommUtils;
+import com.lwdevelop.customerServiceAdmin.utils.JwtUtils;
 import com.lwdevelop.customerServiceAdmin.utils.ResponseUtils;
 import com.lwdevelop.customerServiceAdmin.utils.RetEnum;
 
@@ -37,18 +38,64 @@ public class AdminPanelController {
     @Autowired
     private AdminServiceImpl adminService;
 
+    @PostMapping("/login")
+    public ResponseEntity<ResponseUtils.ResponseData> login(
+            HttpServletRequest request,
+            @RequestParam("username") String username,
+            @RequestParam("password") String password) throws Exception {
+        Admin admin = adminService.findByUsername(username);
+        HashMap<String, Object> data = new HashMap<>();
+        try {
+            String userAgent = request.getHeader("User-Agent");
+            if (userAgent != null && userAgent.length() > 255) {
+                userAgent = userAgent.substring(0, 255);
+            }
+            admin.setLastLoginIP(CommUtils.getClientIP(request));
+            adminService.saveAdmin(admin);
+            log.info("AdminPanelController ==> login ... [ {}{} ]", username,"登入成功");
+            JwtUtils jwtToken = new JwtUtils();
+            String token = jwtToken.generateToken(admin); // 取得token
+            data.put("token", token);
+            return ResponseUtils.response(RetEnum.RET_SUCCESS, data,"登入成功");
+        } catch (Exception e) {
+            log.info("AdminPanelController ==> login ... [ {} ] Exception:{}", "登入失敗",e.toString());
+            return ResponseUtils.response(RetEnum.RET_LOGIN_FAIL, data);
+        }
+        
+    }
+
+    @PostMapping("/loginOut")
+    public ResponseEntity<ResponseUtils.ResponseData> loginOut(
+            HttpServletRequest request,
+            @RequestParam("token") String token) throws Exception {
+            new JwtUtils().invalidateToken(token);
+            return ResponseUtils.response(RetEnum.RET_SUCCESS, new HashMap<>());
+        
+    }
+
+    @PostMapping("/info")
+    public ResponseEntity<ResponseUtils.ResponseData> getInfoApi(
+            HttpServletRequest request,
+            @RequestParam("token") String token) throws Exception {
+        String username = new JwtUtils().verifyToken(token);
+        Admin admin = adminService.findByUsername(username);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("info",admin);
+        return ResponseUtils.response(RetEnum.RET_SUCCESS, data);
+    }
+
     @PostMapping("/getAllAdmins")
     public ResponseEntity<ResponseUtils.ResponseData> getAllAdmins(
             HttpServletRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam("input") String input) throws Exception {
-        HashMap<String, Object> res = new HashMap<>();
+        HashMap<String, Object> data = new HashMap<>();
         List<Admin> adminList = adminService.findAll(input, page, pageSize);
         Object pager = CommUtils.Pager(page, pageSize, adminList.size());
-        res.put("list", adminList);
-        res.put("pager", pager);
-        return ResponseUtils.response(RetEnum.RET_SUCCESS, res);
+        data.put("list", adminList);
+        data.put("pager", pager);
+        return ResponseUtils.response(RetEnum.RET_SUCCESS, data);
     }
 
     @PostMapping("/updateAdmin")

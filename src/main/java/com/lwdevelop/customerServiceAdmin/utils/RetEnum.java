@@ -11,6 +11,7 @@ public enum RetEnum {
 
     // 業務相關
     RET_USER_EXISTS(1001, "用戶已經存在"),
+    RET_LOGIN_FAIL(1002, "登入失敗"),
 
     // 失败(01开始标示参数校验相关错误码)
     RET_PARAM_NOT_FOUND(0101, "参数不存在"),
