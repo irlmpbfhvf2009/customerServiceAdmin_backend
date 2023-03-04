@@ -45,6 +45,15 @@ public class AdminPanelController {
             @RequestParam("password") String password) throws Exception {
         Admin admin = adminService.findByUsername(username);
         HashMap<String, Object> data = new HashMap<>();
+        if (admin == null) {
+            return ResponseUtils.response(RetEnum.RET_USER_NOT_EXIST, data);
+        }
+        if (!admin.getPassword().equals(password)) {
+            return ResponseUtils.response(RetEnum.RET_USER_PASSWORD_ERROR, data);
+        }
+        if(!admin.getEnabled()){
+            return ResponseUtils.response(RetEnum.RET_USER_DISABLED, data);
+        }
         try {
             String userAgent = request.getHeader("User-Agent");
             if (userAgent != null && userAgent.length() > 255) {
@@ -107,7 +116,7 @@ public class AdminPanelController {
 
         if (username != null) {
             log.info("AdminPanelController ==> addAdmin ... 用戶已經存在 [ {} ]", adminDTOUsername);
-            return ResponseUtils.response(RetEnum.RET_USER_EXISTS, new HashMap<>());
+            return ResponseUtils.response(RetEnum.RET_USER_EXIST, new HashMap<>());
         }
         Admin admin = adminService.findById(adminDTO.getId()).get();
         admin.setUsername(adminDTO.getUsername());
@@ -128,7 +137,7 @@ public class AdminPanelController {
 
         if (username != null) {
             log.info("AdminPanelController ==> addAdmin ... 用戶已經存在 [ {} ]", adminDTOUsername);
-            return ResponseUtils.response(RetEnum.RET_USER_EXISTS, new HashMap<>());
+            return ResponseUtils.response(RetEnum.RET_USER_EXIST, new HashMap<>());
         }
 
         Admin admin = new Admin();
@@ -138,7 +147,6 @@ public class AdminPanelController {
         admin.setEnabled(adminDTO.getEnabled());
         admin.setRoles(roles);
         admin.setRegIp(CommUtils.getClientIP(request));
-        admin.setEnabled(true);
         admin.setLastLoginIP(CommUtils.getClientIP(request));
         adminService.saveAdmin(admin);
         log.info("AdminPanelController ==> addAdmin ... [ {} ]", adminDTOUsername + "新增成功");
@@ -154,6 +162,18 @@ public class AdminPanelController {
             adminService.deleteById(Long.parseLong(id));
         }
         return ResponseUtils.response(RetEnum.RET_SUCCESS, new HashMap<>(), "刪除成功");
+    }
+
+    @PostMapping("/passwordChange")
+    public ResponseEntity<ResponseUtils.ResponseData> passwordChange(
+            HttpServletRequest request,
+            @RequestBody AdminDTO adminDTO) throws Exception {
+        Long id = adminDTO.getId();
+        String password = adminDTO.getPassword();
+        Admin admin = adminService.findById(id).get();
+        admin.setPassword(password);
+        adminService.saveAdmin(admin);
+        return ResponseUtils.response(RetEnum.RET_SUCCESS, new HashMap<>(), "修改密碼成功，即將跳轉到登入頁面");
     }
 
     @GetMapping("/admin_panel")

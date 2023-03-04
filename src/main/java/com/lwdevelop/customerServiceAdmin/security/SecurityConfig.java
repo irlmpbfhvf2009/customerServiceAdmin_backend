@@ -59,8 +59,8 @@ public class SecurityConfig {
                 .addFilterBefore(JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/admins/**").hasAuthority("ADMIN")
-                .antMatchers(AUTH_LIST).permitAll()
+                .antMatchers("/admins/login").permitAll()
+                .antMatchers(AUTH_LIST).hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .build();

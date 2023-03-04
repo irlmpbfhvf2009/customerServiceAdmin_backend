@@ -6,12 +6,15 @@ package com.lwdevelop.customerServiceAdmin.utils;
  */
 public enum RetEnum {
 
-    // 0000: 成功
+    // 200: 成功
     RET_SUCCESS(200, ""),
 
     // 業務相關
-    RET_USER_EXISTS(1001, "用戶已經存在"),
-    RET_LOGIN_FAIL(1002, "登入失敗"),
+    RET_USER_EXIST(1001, "用戶已經存在"),
+    RET_USER_NOT_EXIST(1002, "用戶不存在"),
+    RET_USER_PASSWORD_ERROR(1003, "用戶密碼錯誤"),
+    RET_USER_DISABLED(1004, "用戶停用中"),
+    RET_LOGIN_FAIL(1005, "登入失敗"),
 
     // 失败(01开始标示参数校验相关错误码)
     RET_PARAM_NOT_FOUND(0101, "参数不存在"),
