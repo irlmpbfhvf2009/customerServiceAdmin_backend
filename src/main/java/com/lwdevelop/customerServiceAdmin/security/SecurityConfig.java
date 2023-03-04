@@ -52,7 +52,7 @@ public class SecurityConfig {
         "/test/**",
         "/chat/**",
         "/chata/**",
-        "/admin/**",
+        "/admins/**",
         "/ws/**",
         "/tmax/**",
       };

@@ -1,13 +1,26 @@
 package com.lwdevelop.customerServiceAdmin.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ApiModel
+@ToString
 public class AdminDTO {
     
-    private String username;
-    private String password;
+    @ApiModelProperty(value = "編號", required = true)
+    private Long id;
     
-    // getters and setters
+    @ApiModelProperty(value = "用戶名", required = true)
+    private String username;
+
+    @ApiModelProperty(value = "密碼", required = true)
+    private String password;
+
+    @ApiModelProperty(value = "狀態", required = true)
+    private Boolean enabled;
+    
     
 }

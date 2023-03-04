@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import eu.bitwalker.useragentutils.UserAgent;
+import lombok.Getter;
 import eu.bitwalker.useragentutils.OperatingSystem;
 
 /**
@@ -86,4 +87,25 @@ public class CommUtils {
     {		
 		return UUID.randomUUID().toString().replaceAll("-", "");
     }
+    
+    public static Object Pager(int page, int pageSize, int total) {
+        Pager pager = new Pager(page, pageSize, total);
+        return pager;
+    }
+    @Getter
+    public static class Pager {
+        private final int page;
+        private final int pageSize;
+        private final int total;
+    
+        public Pager(int page, int pageSize, int total) {
+            this.page = page;
+            this.pageSize = pageSize;
+            this.total = total;
+        }
+    
+    }
+
+
+
 }

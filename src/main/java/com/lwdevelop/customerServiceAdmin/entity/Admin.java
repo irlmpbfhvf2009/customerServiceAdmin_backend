@@ -31,12 +31,14 @@ import lombok.Data;
 public class Admin implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String username;
 
     private String password;
+
+    private Boolean enabled;
 
     private String regIp; // 註冊IP
 
@@ -83,7 +85,7 @@ public class Admin implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
 }
