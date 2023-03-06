@@ -7,16 +7,15 @@ public class ChatMessageDTO {
 
     private String uniqueId;
 
-    private String message;
+    private String content;
 
 
 
     public ChatMessageDTO() {}
 
-    public ChatMessageDTO(String uniqueId,String message) {
+    public ChatMessageDTO(String uniqueId,String content) {
         this.uniqueId = uniqueId;
-        this.message = message;
+        this.content = content;
     }
 
-    // getters and setters
 }

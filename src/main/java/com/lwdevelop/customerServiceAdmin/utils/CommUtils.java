@@ -1,9 +1,7 @@
 package com.lwdevelop.customerServiceAdmin.utils;
 
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
-
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.Getter;
 import eu.bitwalker.useragentutils.OperatingSystem;

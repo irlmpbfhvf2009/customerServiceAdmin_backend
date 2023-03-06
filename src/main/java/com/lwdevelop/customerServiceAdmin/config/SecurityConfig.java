@@ -1,4 +1,4 @@
-package com.lwdevelop.customerServiceAdmin.security;
+package com.lwdevelop.customerServiceAdmin.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsUtils;
 
 import com.lwdevelop.customerServiceAdmin.service.impl.AdminServiceImpl;
+import com.lwdevelop.customerServiceAdmin.utils.JwtAuthFilter;
 
 // import com.lwdevelop.backend.service.MemberUserDetailsService;
 

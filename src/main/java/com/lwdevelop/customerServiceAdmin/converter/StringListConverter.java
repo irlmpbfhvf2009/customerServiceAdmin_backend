@@ -3,9 +3,9 @@ package com.lwdevelop.customerServiceAdmin.converter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+
 @Converter
 public class StringListConverter implements AttributeConverter<List<String>, String> {
 

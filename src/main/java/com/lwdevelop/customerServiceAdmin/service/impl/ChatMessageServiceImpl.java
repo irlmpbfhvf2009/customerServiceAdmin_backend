@@ -1,10 +1,8 @@
 package com.lwdevelop.customerServiceAdmin.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.lwdevelop.customerServiceAdmin.dto.ChatMessageDTO;
 import com.lwdevelop.customerServiceAdmin.entity.ChatMessage;
 import com.lwdevelop.customerServiceAdmin.repository.ChatMessageRepository;
