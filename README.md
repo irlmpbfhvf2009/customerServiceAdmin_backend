@@ -12,58 +12,58 @@ Security: Security是Spring框架中的安全框架，用於保護Web應用程�
 
 管理員可以使用其帳號密碼登入到系統後台，以便進行系統管理和客服人員分配。客戶的身分則通過IP地址來辨識，這樣可以避免客戶需要註冊和登入。當客戶發送消息時，系統會使用RabbitMQ將消息分發到可用的客服人員中。當客戶和客服人員之間進行通信時，系統會使用WebSocket實現即時通信。
 
-project
-│   README.md
-│   pom.xml
-│
-└───src
-│   └───main
-│       ├───java
-│       │   └───com.example
-│       │       ├───config
-│       │       │   ├───RabbitMQConfig.java
-│       │       │   ├───SecurityConfig.java
-│       │       │   └───WebSocketConfig.java
-│       │       ├───controller
-│       │       │   ├───AdminPanelController.java
-│       │       │   └───ChatController.java
-│       │       ├───dto
-│       │       │   ├───AdminDTO.java
-│       │       │   ├───ChatMessageDTO.java
-│       │       │   └───UserDTO.java
-│       │       ├───model
-│       │       │   ├───Admin.java
-│       │       │   ├───ChatMessage.java
-│       │       │   └───User.java
-│       │       ├───repository
-│       │       │   ├───AdminRepository.java
-│       │       │   ├───ChatMessageRepository.java
-│       │       │   └───UserRepository.java
-│       │       ├───service   
-│       │       │   ├───AdminService.java
-│       │       │   ├───ChatMessageService.java
-│       │       │   ├───UserService.java
-│       │       │   └───impl    
-│       │       │       ├───AdminServiceImpl.java
-│       │       │       ├───ChatMessageServiceImpl.java
-│       │       │       └───UserServiceImpl.java
-│       │       └───WebSocketHandler.java   以此架構分別寫出ChatMessageServiceImpl.java、UserServiceImpl.java
-│       └───resources   以此架構分別寫出WebSocketHandler.java
-│           ├───static
-│           │   ├───css
-│           │   ├───js
-│           │   └───img
-│           ├───templates
-│           │   ├───admin_panel.html
-│           │   └───chat.html
-│           └───application.properties
-└───test
-    └───java
-        └───com.example
-            ├───controller
-            ├───service
-            │   ├───impl
-            │   └───mock
-            └───WebSocketHandlerTest.java
+project  
+│   README.md  
+│   pom.xml  
+│  
+└───src  
+│   └───main  
+│       ├───java  
+│       │   └───com.example  
+│       │       ├───config  
+│       │       │   ├───RabbitMQConfig.java  
+│       │       │   ├───SecurityConfig.java  
+│       │       │   └───WebSocketConfig.java  
+│       │       ├───controller  
+│       │       │   ├───AdminPanelController.java  
+│       │       │   └───ChatController.java  
+│       │       ├───dto  
+│       │       │   ├───AdminDTO.java  
+│       │       │   ├───ChatMessageDTO.java  
+│       │       │   └───UserDTO.java  
+│       │       ├───model  
+│       │       │   ├───Admin.java  
+│       │       │   ├───ChatMessage.java  
+│       │       │   └───User.java  
+│       │       ├───repository  
+│       │       │   ├───AdminRepository.java  
+│       │       │   ├───ChatMessageRepository.java  
+│       │       │   └───UserRepository.java  
+│       │       ├───service     
+│       │       │   ├───AdminService.java  
+│       │       │   ├───ChatMessageService.java  
+│       │       │   ├───UserService.java  
+│       │       │   └───impl  
+│       │       │       ├───AdminServiceImpl.java  
+│       │       │       ├───ChatMessageServiceImpl.java  
+│       │       │       └───UserServiceImpl.java  
+│       │       └───WebSocketHandler.java   以此架構分別寫出ChatMessageServiceImpl.java、UserServiceImpl.java  
+│       └───resources   以此架構分別寫出WebSocketHandler.java  
+│           ├───static  
+│           │   ├───css  
+│           │   ├───js  
+│           │   └───img  
+│           ├───templates  
+│           │   ├───admin_panel.html  
+│           │   └───chat.html  
+│           └───application.properties  
+└───test  
+    └───java  
+        └───com.example  
+            ├───controller  
+            ├───service  
+            │   ├───impl  
+            │   └───mock  
+            └───WebSocketHandlerTest.java  
 
 
