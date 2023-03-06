@@ -41,13 +41,18 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
     
-    private static final String[] AUTH_LIST = {
+    private static final String[] ADMIN_AUTH_LIST = {
         "/v3/api-docs",
         "/configuration/ui",
         "/swagger-resources/**",
         "/configuration/security",
         "/swagger-ui.html",
         "/webjars/**"
+      };
+
+    private static final String[] ALL_AUTH_LIST = {
+        "/tmax/ws/**",
+        "/admins/login",
       };
 
     @Bean
@@ -59,9 +64,8 @@ public class SecurityConfig {
                 .addFilterBefore(JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                // .antMatchers("/tmax/ws/**").permitAll()
-                .antMatchers("/admins/login").permitAll()
-                .antMatchers(AUTH_LIST).hasAuthority("ADMIN")
+                .antMatchers(ALL_AUTH_LIST).permitAll()
+                .antMatchers(ADMIN_AUTH_LIST).hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .build();

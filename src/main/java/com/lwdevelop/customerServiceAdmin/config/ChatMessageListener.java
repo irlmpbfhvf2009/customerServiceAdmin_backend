@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lwdevelop.customerServiceAdmin.entity.ChatMessage;
-
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,17 +18,18 @@ public class ChatMessageListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         System.out.println(message);
-        String payload = new String(message.getBody());
+        // String payload = new String(message.getBody());
         // 根据消息的类型进行转换，这里假设消息是JSON格式的
-        ChatMessage chatMessage;
-        try {
-            chatMessage = convertMessage(payload);
-            // messagingTemplate.convertAndSend("/topic/chat/" + chatMessage.getRoomId(), chatMessage);
+        // ChatMessage chatMessage;
+        // messagingTemplate.convertAndSend("/topic/chat", "123");
+        // System.out.println("asdasd");
+        // try {
+        //     chatMessage = convertMessage(payload);
             // messagingTemplate.convertAndSend("/topic/chat/" + chatMessage.getRoomId(), "123");
-            messagingTemplate.convertAndSend("/topic/chat", "123");
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        //     messagingTemplate.convertAndSend("/topic/chat", "123");
+        // } catch (JsonProcessingException e) {
+        //     e.printStackTrace();
+        // }
 
         // 将消息发送给指定的WebSocket客户端
     }

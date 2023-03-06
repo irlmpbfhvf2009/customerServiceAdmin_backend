@@ -5,24 +5,17 @@ import lombok.Data;
 @Data
 public class ChatMessageDTO {
 
-    private Long id;
-
-    private UserDTO user;
-
-    private AdminDTO admin;
+    private String uniqueId;
 
     private String message;
 
-    private String senderEmail;
 
 
     public ChatMessageDTO() {}
 
-    public ChatMessageDTO(UserDTO user, AdminDTO admin, String message, String senderEmail) {
-        this.user = user;
-        this.admin = admin;
+    public ChatMessageDTO(String uniqueId,String message) {
+        this.uniqueId = uniqueId;
         this.message = message;
-        this.senderEmail = senderEmail;
     }
 
     // getters and setters
