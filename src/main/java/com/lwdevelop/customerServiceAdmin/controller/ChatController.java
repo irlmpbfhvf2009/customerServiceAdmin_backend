@@ -1,5 +1,8 @@
 package com.lwdevelop.customerServiceAdmin.controller;
 
+
+import java.util.List;
+
 import javax.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,14 +13,16 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.lwdevelop.customerServiceAdmin.entity.ChatMessage;
 import com.lwdevelop.customerServiceAdmin.service.impl.ChatMessageServiceImpl;
 
 @Controller
+@RequestMapping("/tmax/ws")
 public class ChatController {
 
     @Autowired
@@ -27,15 +32,16 @@ public class ChatController {
     private ChatMessageServiceImpl chatMessageServiceImpl;
 
     /**
-     * 跳转至hello.html界面
-     * 
-     * @return
+     * 发送聊天消息
+     *
+     * @param chatMessage 聊天消息对象
+     * @return 发送结果
      */
-    @RequestMapping("/index")
-    public String index() {
-        return "index";
+    @GetMapping("/api/chat")
+    public List<ChatMessage> getChatMessages(@Payload ChatMessage chatMessage) {
+        return null;
+        // ...
     }
-
     /**
      * 发送聊天消息
      *

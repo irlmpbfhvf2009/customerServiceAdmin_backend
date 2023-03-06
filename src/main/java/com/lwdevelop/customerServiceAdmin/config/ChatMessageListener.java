@@ -18,12 +18,15 @@ public class ChatMessageListener implements MessageListener {
     
     @Override
     public void onMessage(Message message) {
+        System.out.println(message);
         String payload = new String(message.getBody());
         // 根据消息的类型进行转换，这里假设消息是JSON格式的
         ChatMessage chatMessage;
         try {
             chatMessage = convertMessage(payload);
-            messagingTemplate.convertAndSend("/topic/chat/" + chatMessage.getRoomId(), chatMessage);
+            // messagingTemplate.convertAndSend("/topic/chat/" + chatMessage.getRoomId(), chatMessage);
+            // messagingTemplate.convertAndSend("/topic/chat/" + chatMessage.getRoomId(), "123");
+            messagingTemplate.convertAndSend("/topic/chat", "123");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
