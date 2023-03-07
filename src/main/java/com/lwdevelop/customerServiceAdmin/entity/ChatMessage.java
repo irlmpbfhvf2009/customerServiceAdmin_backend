@@ -16,22 +16,24 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fromUser;
+    private String uniqueId;
 
-    private String toUser;
+    private String ip;
+
+    private Long toAdminId;
 
     private String content;
 
     private Long timestamp;
 
-    private Long roomId; // 添加 roomId 字段
 
-    public ChatMessage(String fromUser, String toUser, String content, Long timestamp, Long roomId) {
-        this.fromUser = fromUser;
-        this.toUser = toUser;
+
+    public ChatMessage(String uniqueId, String ip, Long toAdminId, String content, Long timestamp) {
+        this.uniqueId = uniqueId;
+        this.ip = ip;
+        this.toAdminId = toAdminId;
         this.content = content;
         this.timestamp = timestamp;
-        this.roomId = roomId;
     }
     
 }

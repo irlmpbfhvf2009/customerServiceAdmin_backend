@@ -16,9 +16,6 @@ import com.lwdevelop.customerServiceAdmin.dto.ChatMessageDTO;
 public class ChatController {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
     /**
@@ -28,18 +25,38 @@ public class ChatController {
      * @return 发送结果
      */
     @MessageMapping("/topic/chat/{uniqueId}")
-    public ChatMessageDTO handleMessage(@Payload ChatMessageDTO message, SimpMessageHeaderAccessor headerAccessor) {
+    public ChatMessageDTO handleMessage(@Payload ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor) {
 
         String ip = (String) headerAccessor.getSessionAttributes().get("ip");
         String sessionId = headerAccessor.getSessionId();
         System.out.println("ip="+ip+",sessionId="+sessionId);
-        System.out.println(message);
+        System.out.println(chatMessageDTO);
         System.out.println(headerAccessor);
-
-        // ChatMessage類表示收到的消息，SimpMessageHeaderAccessor可以獲取消息頭信息
-        messagingTemplate.convertAndSend("/topic/chat/"+message.getUniqueId(),message);
-        // rabbitTemplate.convertAndSend("chat-exchange", "tmax/ws", message.getContent());
-        // System.out.println(headerAccessor);
-        return message;
+        messagingTemplate.convertAndSend("/topic/chat/"+chatMessageDTO.getUniqueId(),chatMessageDTO);
+        return chatMessageDTO;
     }
+    // add user in web socket session
+    @MessageMapping("/chat.addUser")
+    @SendTo("/topic/public")
+    public ChatMessageDTO addUser(@Payload ChatMessageDTO chatMessageDTO,
+                                  SimpMessageHeaderAccessor headerAccessor) {
+        // Add username in web socket session
+        headerAccessor.getSessionAttributes().put("username", chatMessageDTO.getSender());
+        return chatMessageDTO;
+    }
+
+    // send message to user
+    @MessageMapping("/chat.sendMessage")
+    public void sendMessage(@Payload ChatMessageDTO chatMessageDTO) {
+        messagingTemplate.convertAndSendToUser(chatMessageDTO.getReceiver(), "/queue/messages",
+                chatMessageDTO);
+    }
+
+    // send message to user
+    @MessageMapping("/chat.sendMessageToAll")
+    public void sendMessageToAll(@Payload ChatMessageDTO chatMessageDTO) {
+        messagingTemplate.convertAndSend("/topic/chat/"+chatMessageDTO.getUniqueId(),chatMessageDTO);
+    }
+
+
 }
