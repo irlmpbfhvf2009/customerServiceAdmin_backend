@@ -15,6 +15,7 @@ public class IpHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
             Map<String, Object> attributes) throws Exception {
+
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             String ipAddress = servletRequest.getServletRequest().getHeader("X-FORWARDED-FOR");
@@ -30,5 +31,7 @@ public class IpHandshakeInterceptor implements HandshakeInterceptor {
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
             @Nullable Exception exception) {
     }
+
+
 
 }

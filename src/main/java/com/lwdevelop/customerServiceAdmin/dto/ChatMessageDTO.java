@@ -1,31 +1,29 @@
 package com.lwdevelop.customerServiceAdmin.dto;
 
+import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatMessageDTO {
 
-    private String uniqueId;
+    // 傳送者
+    private String sender;
+
+    // 接收者
+    private String receiver;
 
     private String ip;
 
-    // for adminId
-    private Long toAdminId;
     
     private String content;
 
-    private Long timestamp;
+    private Date timestamp;
 
 
-
-    public ChatMessageDTO() {}
-
-    public ChatMessageDTO(String uniqueId,String ip,Long toAdminId,String content, Long timestamp) {
-        this.uniqueId = uniqueId;
-        this.ip = ip;
-        this.toAdminId = toAdminId;
-        this.content = content;
-        this.timestamp = timestamp;
-    }
 
 }

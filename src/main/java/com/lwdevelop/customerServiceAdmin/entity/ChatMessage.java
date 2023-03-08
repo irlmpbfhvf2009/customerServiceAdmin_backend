@@ -1,5 +1,7 @@
 package com.lwdevelop.customerServiceAdmin.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,29 +13,29 @@ import lombok.Data;
 @Entity
 @Table(name = "chat_message")
 public class ChatMessage {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uniqueId;
+    // 傳送者
+    private String sender;
+
+    // 接收者
+    private String receiver;
 
     private String ip;
 
-    private Long toAdminId;
-
     private String content;
 
-    private Long timestamp;
+    private Date timestamp;
 
-
-
-    public ChatMessage(String uniqueId, String ip, Long toAdminId, String content, Long timestamp) {
-        this.uniqueId = uniqueId;
+    public ChatMessage(String sender, String receiver, String ip, String content, Date timestamp) {
+        this.sender = sender;
+        this.receiver = receiver;
         this.ip = ip;
-        this.toAdminId = toAdminId;
         this.content = content;
         this.timestamp = timestamp;
     }
-    
+
 }
