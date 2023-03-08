@@ -1,6 +1,10 @@
 package com.lwdevelop.customerServiceAdmin.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +19,12 @@ import com.lwdevelop.customerServiceAdmin.service.ChatMessageService;
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService {
     
+    private final SimpMessagingTemplate messagingTemplate;
+
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    public ChatMessageServiceImpl(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -25,15 +33,14 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private ChatMessageRepository chatMessageRepository;
 
 
-    @Override
-    public List<ChatMessage> findRecentMessages() {
-        return chatMessageRepository.findTop10ByOrderByTimestampDesc();
-    }
+    
 
     @Override
     public void saveMessage(ChatMessageDTO chatMessageDTO) {
         throw new UnsupportedOperationException("Unimplemented method 'saveMessage'");
     }
+
+
 
     @Override
     public ChatMessage save(ChatMessage chatMessage) {
@@ -46,26 +53,57 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         chatMessageDTO);
     }
 
-
+    // 線上用戶列表
+    private static Map<String, ChatMessageDTO> onlineUsers = new HashMap<>();
+    // 線上客服列表
+    private static Map<String, ChatMessageDTO> onlineCustomService = new HashMap<>();
+    
     @Override
     public ChatMessageDTO handleMessage(ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor) {
         String ip = (String) headerAccessor.getSessionAttributes().get("ip");
         String sessionId = headerAccessor.getSessionId();
-        System.out.println("ip="+ip+",sessionId="+sessionId);
-        System.out.println(chatMessageDTO);
-        System.out.println(headerAccessor);
-        messagingTemplate.convertAndSend("/topic/chat/"+chatMessageDTO.getSender(),chatMessageDTO);
         return chatMessageDTO;
     }
 
     @Override
-    public ChatMessageDTO addUser(ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor) {
-        System.out.println("addUser Service  ... ");
-        String ip = (String) headerAccessor.getSessionAttributes().get("ip");
-        chatMessageDTO.setIp(ip);
-        System.out.println(chatMessageDTO);
+    public ChatMessageDTO userUpdate(ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor) {
+
+        if(chatMessageDTO.getType().equals("JOIN")){
+            String ip = (String) headerAccessor.getSessionAttributes().get("ip");
+            chatMessageDTO.setIp(ip);
+            if(chatMessageDTO.getIsUser()){
+                onlineUsers.put(chatMessageDTO.getSender(), chatMessageDTO);
+                if(onlineCustomService.size() > 0){
+                    List<String> keys = new ArrayList<>(onlineCustomService.keySet());
+                    String randomKey = keys.get(new Random().nextInt(keys.size()));
+                    chatMessageDTO.setReceiver(randomKey);
+                }
+            }else{
+                onlineCustomService.put(chatMessageDTO.getSender(), chatMessageDTO);
+            }
+            return chatMessageDTO;
+        }else{
+            if(chatMessageDTO.getIsUser()){
+                onlineUsers.remove(chatMessageDTO.getSender());
+            }else{
+                onlineCustomService.remove(chatMessageDTO.getSender());
+            }
+            return chatMessageDTO;
+        }
+    }
+
+
+    // 用戶指派隨機客服(設定receiver)
+    @Override
+    public ChatMessageDTO assignUser(ChatMessageDTO chatMessageDTO) {
+        if(onlineCustomService.size() > 0){
+            List<String> keys = new ArrayList<>(onlineCustomService.keySet());
+            String randomKey = keys.get(new Random().nextInt(keys.size()));
+            chatMessageDTO.setReceiver(randomKey);
+        }
         return chatMessageDTO;
     }
+
 
 
 }

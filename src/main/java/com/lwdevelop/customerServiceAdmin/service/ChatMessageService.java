@@ -10,12 +10,13 @@ import com.lwdevelop.customerServiceAdmin.entity.ChatMessage;
 public interface ChatMessageService {
     // DB CRUD
     ChatMessage save(ChatMessage chatMessage);
-    List<ChatMessage> findRecentMessages();
+
     void saveMessage(ChatMessageDTO chatMessageDTO);
 
     // custom
     void sendMessageToUser(ChatMessageDTO chatMessageDTO);
     ChatMessageDTO handleMessage(ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor);
-    ChatMessageDTO addUser(ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor);
+    ChatMessageDTO userUpdate(ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor);
+    ChatMessageDTO assignUser(ChatMessageDTO chatMessageDTO);
     
 }

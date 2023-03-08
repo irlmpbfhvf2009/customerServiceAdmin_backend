@@ -12,5 +12,5 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     List<ChatMessage> findAllByOrderByTimestampAsc();
 
     List<ChatMessage> findTop10ByOrderByTimestampDesc();
-    
+
 }

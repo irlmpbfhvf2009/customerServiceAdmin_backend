@@ -19,10 +19,13 @@ public class ChatMessageDTO {
 
     private String ip;
 
-    
     private String content;
 
     private Date timestamp;
+
+    private Boolean isUser;
+
+    private String type;
 
 
 
