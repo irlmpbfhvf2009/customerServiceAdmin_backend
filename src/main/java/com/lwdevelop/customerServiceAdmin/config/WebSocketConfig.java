@@ -5,8 +5,6 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-
-import com.lwdevelop.customerServiceAdmin.utils.CustomHandshakeHandler;
 import com.lwdevelop.customerServiceAdmin.utils.IpHandshakeInterceptor;
 
 @Configuration
@@ -26,7 +24,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 允許使用socketJs方式訪問 即可通過http://IP:PORT/tmax/ws來和服務端websocket連接
         registry.addEndpoint("/tmax/ws")
-                .setHandshakeHandler(new CustomHandshakeHandler())
+                // .setHandshakeHandler(new CustomHandshakeHandler())
                 .addInterceptors(new IpHandshakeInterceptor())
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
