@@ -25,7 +25,7 @@ public class ChatMessageDTO {
 
     private Boolean isUser;
 
-    // private Boolean isOnline;
+    private Boolean isOnline;
 
     private String type;
 

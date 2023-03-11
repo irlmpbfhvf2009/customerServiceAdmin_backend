@@ -13,6 +13,5 @@ public interface ChatMessageService {
     // custom
     void sendMessageToUser(ChatMessageDTO chatMessageDTO);
     ChatMessageDTO userUpdate(ChatMessageDTO chatMessageDTO, SimpMessageHeaderAccessor headerAccessor);
-    void loadCustomService();
     
 }

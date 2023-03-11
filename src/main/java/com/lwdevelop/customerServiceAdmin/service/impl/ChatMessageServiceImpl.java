@@ -120,14 +120,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 
 
-    @Override
-    public void loadCustomService() {
-        LoadCustomService loadCustomService = new LoadCustomService();
-        loadCustomService.setOnlineUsers(onlineUsers);
-        loadCustomService.setOnlineCustomService(onlineCustomService);
-    }
-
-
 
 
 }

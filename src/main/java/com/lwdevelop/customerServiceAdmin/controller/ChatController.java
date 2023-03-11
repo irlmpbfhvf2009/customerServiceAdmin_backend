@@ -33,12 +33,5 @@ public class ChatController {
         chatMessageService.sendMessageToUser(chatMessageDTO);
     }
 
-    // 客服載入onlineCustomService
-    @MessageMapping("/chat.loadCustomService")
-    @SendTo("/topic/loadCustomService")
-    public void loadCustomService() {
-        
-        chatMessageService.loadCustomService();
-    }
 
 }
