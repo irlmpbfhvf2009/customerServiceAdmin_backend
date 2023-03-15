@@ -1,10 +1,13 @@
 package com.lwdevelop.customerServiceAdmin.controller;
 
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lwdevelop.customerServiceAdmin.dto.ChatMessageDTO;
@@ -19,18 +22,19 @@ public class ChatController {
 
 
     // user join or leave in web socket session
-    @MessageMapping("/chat.userUpdate")
-    @SendTo("/topic/userUpdate")
-    public ChatMessageDTO userUpdate(@Payload ChatMessageDTO chatMessageDTO,SimpMessageHeaderAccessor headerAccessor) {
+    @MessageMapping("/chat.userOnlineStatus")
+    @SendTo("/topic/userOnlineStatus")
+    public List<ChatMessageDTO> userOnlineStatus(@Payload ChatMessageDTO chatMessageDTO,SimpMessageHeaderAccessor headerAccessor) {
 
-        return chatMessageService.userUpdate(chatMessageDTO, headerAccessor);
+        return chatMessageService.userOnlineStatus(chatMessageDTO, headerAccessor);
     }
+
 
     // send message to user
     @MessageMapping("/chat.sendMessage")
-    public void sendMessageToUser(@Payload ChatMessageDTO chatMessageDTO) {
+    public void sendMessage(@Payload ChatMessageDTO chatMessageDTO) {
 
-        chatMessageService.sendMessageToUser(chatMessageDTO);
+        chatMessageService.sendMessage(chatMessageDTO);
     }
 
 

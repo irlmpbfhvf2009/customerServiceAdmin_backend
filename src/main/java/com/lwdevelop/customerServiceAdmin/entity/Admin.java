@@ -10,7 +10,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -65,8 +64,6 @@ public class Admin implements UserDetails {
         return roles.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList()); 
     }
 
-    @OneToMany(mappedBy = "admin")
-    private List<ChatRecord> chatRecords; // 管理员参与的聊天记录
 
     @Override
     public boolean isAccountNonExpired() {
